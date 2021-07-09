@@ -4,13 +4,12 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
 } from 'typeorm'
-import { Exclude } from 'class-transformer'
+import { classToPlain, Exclude } from 'class-transformer'
 
 export default abstract class Entity extends BaseEntity {
     @Exclude()
     @PrimaryGeneratedColumn()
     id: number
-
 
     @CreateDateColumn()
     createdAt: Date
@@ -18,4 +17,7 @@ export default abstract class Entity extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date
 
+    toJSON() {
+        return classToPlain(this)
+    }
 }
