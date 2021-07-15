@@ -4,6 +4,9 @@ export interface Post {
     body: string
     slug: string
     subName: string
+    username: string
     createdAt: string
     updatedAt: string
+    // Virtual
+    url: string
 }
