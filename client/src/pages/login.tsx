@@ -5,6 +5,8 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 
+import { useAuthDispatch, useAuthState } from '../context/auth'
+
 import InputGroup from '../components/InputGroup'
 
 export default function Register() {
@@ -12,16 +14,22 @@ export default function Register() {
     const [password, setPassword] = useState('')
     const [errors, setErrors] = useState<any>({})
 
+    const dispatch = useAuthDispatch()
+    const { authenticated } = useAuthState()
+
     const router = useRouter()
+    if (authenticated) router.push('/')
 
     const submitForm = async (event: FormEvent) => {
         event.preventDefault()
 
         try {
-            await axios.post('/auth/login', {
+            const res = await axios.post('/auth/login', {
                 username,
                 password,
             })
+
+            dispatch('LOGIN', res.data)
 
             router.push('/')
         } catch (error) {
