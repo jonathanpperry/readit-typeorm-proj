@@ -1,11 +1,11 @@
-import { Fragment } from 'react'
 import Link from 'next/link'
+import { Fragment } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import classNames from 'classnames'
 
 import { Post } from '../types'
-import axios from 'axios'
+import Axios from 'axios'
 
 dayjs.extend(relativeTime)
 
@@ -38,16 +38,18 @@ export default function PostCard({
 }: PostCardProps) {
     const vote = async (value) => {
         try {
-            const res = await axios.post('/misc/vote', {
+            const res = await Axios.post('/misc/vote', {
                 identifier,
                 slug,
                 value,
             })
+
             console.log(res.data)
         } catch (err) {
             console.log(err)
         }
     }
+
     return (
         <div key={identifier} className="flex mb-4 bg-white rounded">
             {/* Vote section */}
@@ -80,15 +82,15 @@ export default function PostCard({
             <div className="w-full p-2">
                 <div className="flex items-center">
                     <Link href={`/r/${subName}`}>
-                        <Fragment>
-                            <img
-                                src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-                                className="w-6 h-6 mr-1 rounded-full cursor-pointer"
-                            />
-                            <a className="text-xs font-bold cursor-pointer hover:underline">
-                                /r/{subName}
-                            </a>
-                        </Fragment>
+                        <img
+                            src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                            className="w-6 h-6 mr-1 rounded-full cursor-pointer"
+                        />
+                    </Link>
+                    <Link href={`/r/${subName}`}>
+                        <a className="text-xs font-bold cursor-pointer hover:underline">
+                            /r/{subName}
+                        </a>
                     </Link>
                     <p className="text-xs text-gray-500">
                         <span className="mx-1">•</span>
