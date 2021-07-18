@@ -121,10 +121,10 @@ const uploadSubImage = async (req: Request, res: Response) => {
 
         if (type === 'image') {
             oldImageUrn = sub.imageUrn || ''
-            sub.imageUrn = req.file?.filename!
+            sub.imageUrn = req.file.filename
         } else if (type === 'banner') {
             oldImageUrn = sub.bannerUrn || ''
-            sub.bannerUrn = req.file?.filename!
+            sub.bannerUrn = req.file.filename
         }
         await sub.save()
 
