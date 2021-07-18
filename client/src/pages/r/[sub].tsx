@@ -8,7 +8,7 @@ import classNames from 'classnames'
 
 import { Sub } from '../../types'
 import { useAuthState } from '../../context/auth'
-import Axios from 'axios'
+import axios from 'axios'
 import Sidebar from '../../components/Sidebar'
 
 export default function SubPage() {
@@ -45,7 +45,7 @@ export default function SubPage() {
     formData.append('type', fileInputRef.current.name)
 
     try {
-      await Axios.post<Sub>(`/subs/${sub.name}/image`, formData, {
+      await axios.post<Sub>(`/subs/${sub.name}/image`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
 

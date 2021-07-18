@@ -1,21 +1,14 @@
+import axios from 'axios'
 import Link from 'next/link'
-import { Fragment } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import classNames from 'classnames'
 
 import { Post } from '../types'
-import Axios from 'axios'
+import ActionButton from './ActionButton'
 
 dayjs.extend(relativeTime)
 
-const ActionButton = ({ children }) => {
-    return (
-        <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
-            {children}
-        </div>
-    )
-}
 
 interface PostCardProps {
     post: Post
@@ -36,9 +29,9 @@ export default function PostCard({
         username,
     },
 }: PostCardProps) {
-    const vote = async (value) => {
+    const vote = async (value: number) => {
         try {
-            const res = await Axios.post('/misc/vote', {
+            const res = await axios.post('/misc/vote', {
                 identifier,
                 slug,
                 value,
@@ -77,6 +70,25 @@ export default function PostCard({
                         })}
                     ></i>
                 </div>
+            </div>
+            <div className="p-2">
+            <div className="flex items-center">
+                    <p className="text-xs text-gray-500">
+                        <span className="mx-1">•</span>
+                        Posted by
+                        <Link href={`/u/${username}`}>
+                            <a className="mx-1 hover:underline">
+                                /u/{username}
+                            </a>
+                        </Link>
+                        <Link href={url}>
+                            <a className="mx-1 hover:underline">
+                                {dayjs(createdAt).fromNow()}
+                            </a>
+                        </Link>
+                    </p>
+                </div>
+
             </div>
             {/* Post data section */}
             <div className="w-full p-2">
