@@ -43,7 +43,8 @@ export interface Comment {
     body: string
     username: string
     createdAt: string
-    updatedAt: string
+    updatedAt: string,
+    post?: Post,
     // Virtuals
     userVote: number
     voteScore: number
