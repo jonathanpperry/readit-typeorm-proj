@@ -6,12 +6,14 @@ import classNames from 'classnames'
 
 import { Post } from '../types'
 import ActionButton from './ActionButton'
+import { useAuthState } from '../context/auth'
+import { useRouter } from 'next/router'
 
 dayjs.extend(relativeTime)
 
-
 interface PostCardProps {
     post: Post
+    revalidate?: Function
 }
 
 export default function PostCard({
@@ -28,8 +30,15 @@ export default function PostCard({
         url,
         username,
     },
+    revalidate,
 }: PostCardProps) {
+    const { authenticated } = useAuthState()
+    const router = useRouter()
+
     const vote = async (value: number) => {
+        if (!authenticated) router.push('/login')
+
+        if (value === userVote) value = 0
         try {
             const res = await axios.post('/misc/vote', {
                 identifier,
@@ -37,14 +46,18 @@ export default function PostCard({
                 value,
             })
 
-            console.log(res.data)
+            if (revalidate) revalidate()
         } catch (err) {
             console.log(err)
         }
     }
 
     return (
-        <div key={identifier} className="flex mb-4 bg-white rounded">
+        <div
+            key={identifier}
+            className="flex mb-4 bg-white rounded"
+            id={identifier}
+        >
             {/* Vote section */}
             <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
                 {/* Upvote */}
@@ -72,7 +85,7 @@ export default function PostCard({
                 </div>
             </div>
             <div className="p-2">
-            <div className="flex items-center">
+                <div className="flex items-center">
                     <p className="text-xs text-gray-500">
                         <span className="mx-1">•</span>
                         Posted by
@@ -88,7 +101,6 @@ export default function PostCard({
                         </Link>
                     </p>
                 </div>
-
             </div>
             {/* Post data section */}
             <div className="w-full p-2">
