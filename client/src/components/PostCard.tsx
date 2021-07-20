@@ -1,5 +1,5 @@
-import axios from 'axios'
 import Link from 'next/link'
+import axios from 'axios'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import classNames from 'classnames'
@@ -29,16 +29,16 @@ export default function PostCard({
         commentCount,
         url,
         username,
+        sub,
     },
     revalidate,
 }: PostCardProps) {
     const { authenticated } = useAuthState()
     const router = useRouter()
 
-    const vote = async (value: number) => {
-        if (!authenticated) router.push('/login')
+    const isInSubPage = router.pathname === '/r/[sub]'
 
-        if (value === userVote) value = 0
+    const vote = async (value: number) => {
         try {
             const res = await axios.post('/misc/vote', {
                 identifier,
@@ -53,11 +53,7 @@ export default function PostCard({
     }
 
     return (
-        <div
-            key={identifier}
-            className="flex mb-4 bg-white rounded"
-            id={identifier}
-        >
+        <div key={identifier} className="flex mb-4 bg-white rounded">
             {/* Vote section */}
             <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
                 {/* Upvote */}
@@ -84,40 +80,28 @@ export default function PostCard({
                     ></i>
                 </div>
             </div>
-            <div className="p-2">
-                <div className="flex items-center">
-                    <p className="text-xs text-gray-500">
-                        <span className="mx-1">•</span>
-                        Posted by
-                        <Link href={`/u/${username}`}>
-                            <a className="mx-1 hover:underline">
-                                /u/{username}
-                            </a>
-                        </Link>
-                        <Link href={url}>
-                            <a className="mx-1 hover:underline">
-                                {dayjs(createdAt).fromNow()}
-                            </a>
-                        </Link>
-                    </p>
-                </div>
-            </div>
             {/* Post data section */}
             <div className="w-full p-2">
                 <div className="flex items-center">
-                    <Link href={`/r/${subName}`}>
-                        <img
-                            src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-                            className="w-6 h-6 mr-1 rounded-full cursor-pointer"
-                        />
-                    </Link>
-                    <Link href={`/r/${subName}`}>
-                        <a className="text-xs font-bold cursor-pointer hover:underline">
-                            /r/{subName}
-                        </a>
-                    </Link>
+                    {!isInSubPage && (
+                        <>
+                            <Link href={`/r/${subName}`}>
+                                <img
+                                    src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                                    className="w-6 h-6 mr-1 rounded-full cursor-pointer"
+                                />
+                            </Link>
+                            <Link href={`/r/${subName}`}>
+                                <a className="text-xs font-bold cursor-pointer hover:underline">
+                                    /r/{subName}
+                                </a>
+                            </Link>
+                            <span className="mx-1 text-xs text-gray-500">
+                                •
+                            </span>
+                        </>
+                    )}
                     <p className="text-xs text-gray-500">
-                        <span className="mx-1">•</span>
                         Posted by
                         <Link href={`/u/${username}`}>
                             <a className="mx-1 hover:underline">
