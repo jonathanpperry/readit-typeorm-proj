@@ -7,7 +7,6 @@ import {
     ManyToOne,
     OneToMany,
 } from 'typeorm'
-import { Exclude, Expose } from 'class-transformer'
 
 import Entity from './Entity'
 import Post from './Post'
@@ -15,6 +14,7 @@ import User from './User'
 
 import { makeId } from '../util/helpers'
 import Vote from './Vote'
+import { Exclude, Expose } from 'class-transformer'
 
 @TOEntity('comments')
 export default class Comment extends Entity {
